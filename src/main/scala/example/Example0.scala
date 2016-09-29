@@ -8,7 +8,7 @@ import scala.concurrent.ExecutionContext.Implicits.global // DON'T DO THIS!
   */
 object Example0 {
 
-  def initialValue(): Future[Char] = Future { 'a' }
+  def initialValue: Future[Char] = Future { 'a' }
   def increment(x: Char): Future[Int] = Future { x.toInt+1 }
   def wrapAnswer(y: Int): Future[String] = Future { "ans = " + y }
 
@@ -16,13 +16,13 @@ object Example0 {
 
     // With for-comprehension
     val result1: Future[String] = for {
-      x <- initialValue()
+      x <- initialValue
       y <- increment(x)
       z <- wrapAnswer(y)
     } yield z.reverse
 
     // Equivalent
-    val result2: Future[String] = initialValue().flatMap {
+    val result2: Future[String] = initialValue.flatMap {
       x => increment(x).flatMap {
         y => wrapAnswer(y).map {
           z => z.reverse
@@ -31,7 +31,7 @@ object Example0 {
     }
 
     // Or more subtly...
-    val result3: Future[String] = initialValue() flatMap increment flatMap wrapAnswer map (_.reverse)
+    val result3: Future[String] = initialValue flatMap increment flatMap wrapAnswer map (_.reverse)
 
     result1 onComplete println
     result2 onComplete println
